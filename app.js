@@ -1,6 +1,6 @@
 import express, { json } from 'express';
 import mongoose from 'mongoose';
-import router from './routes/users';
+import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
 
 const { PORT = 3000,
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(router);
+app.use(usersRouter);
 app.use(cardsRouter);
 
 async function initServer() {
