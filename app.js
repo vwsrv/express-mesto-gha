@@ -1,7 +1,8 @@
+/* eslint-disable import/extensions */
 import express, { json } from 'express';
 import mongoose from 'mongoose';
-import usersRouter from './routes/users';
-import cardsRouter from './routes/cards';
+import usersRouter from './routes/users.js';
+import cardsRouter from './routes/cards.js';
 
 const {
   PORT = 3000,
