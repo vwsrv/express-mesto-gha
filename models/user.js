@@ -1,31 +1,33 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: {
       value: true,
-      message: 'Поле name является обязательным'
+      message: 'Поле name является обязательным',
     },
     minlength: [2, 'Минимальная длина - 2 сивмола'],
-    maxlength: [40, 'Максимальная длина - 40 символов']
+    maxlength: [40, 'Максимальная длина - 40 символов'],
   },
   about: {
     type: String,
     required: {
       value: true,
-      message: 'Поле name является обязательным'
+      message: 'Поле name является обязательным',
     },
     minlength: [2, 'Минимальная длина - 2 сивмола'],
-    maxlength: [30, 'Максимальная длина - 40 символов']
+    maxlength: [30, 'Максимальная длина - 40 символов'],
   },
   avatar: {
     type: String,
     required: {
       value: true,
-      message: 'Поле avatar является обязательным'
+      message: 'Поле avatar является обязательным',
     },
-  }
+  },
 }, { versionKey: false, timestamps: true });
 
-export const User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+export default User;
