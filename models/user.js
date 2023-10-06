@@ -4,15 +4,15 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: {value: true,
-                  message: 'Поле name является обязательным'},
+                   message: 'Поле name является обязательным'},
         minlength: [2, 'Минимальная длина - 2 сивмола'],
         maxlength: [40, 'Максимальная длина - 40 символов']
     },
     about: {
         type: String,
         required: {value: true,
-                  about: 'Поле name является обязательным'},
-        minilength: [2, 'Минимальная длина - 2 сивмола'],
+                   about: 'Поле name является обязательным'},
+        minlength: [2, 'Минимальная длина - 2 сивмола'],
         maxlength: [30, 'Максимальная длина - 40 символов']
     },
     avatar: {
