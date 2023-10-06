@@ -13,7 +13,7 @@ export const createUser = (req, res) => {
   const { error } = userValidation(req.body);
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(201).send({ data: user }))
     .catch(() => {
       if (error) {
         return res.status(400).send({ message: error.details[0].message });
@@ -26,7 +26,7 @@ export const getUserById = (req, res) => {
     .then((data) => res.send({ data }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Пользователь по указанному _id не найден.' });
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
       }
       return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
@@ -42,15 +42,15 @@ export const updateUserInfo = (req, res) => {
     { new: true, runValidators: true, upsert: true },
   )
     .then((updatedUserInfo) => {
-      if (!updatedUserInfo) {
-        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
-        return;
-      }
       res.send({ data: updatedUserInfo });
     })
-    .catch(() => {
+    .catch((err) => {
       if (error) {
         res.status(400).send({ message: error.details[0].message });
+        return;
+      }
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });

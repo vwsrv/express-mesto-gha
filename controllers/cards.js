@@ -8,13 +8,14 @@ export const getCards = (req, res) => {
 };
 
 export const createCard = (req, res) => {
-  const { errors } = cardsValidation(req.body);
+  const { error } = cardsValidation(req.body);
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(201).send({ data: card }))
     .catch(() => {
-      if (errors) {
-        res.status(400).send({ message: errors.details[0].message });
+      if (error) {
+        res.status(400).send({ message: error.details[0].message });
+        return;
       }
       res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
@@ -23,13 +24,15 @@ export const createCard = (req, res) => {
 export const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((cardToDelete) => {
-      if (!cardToDelete) {
+      res.send({ data: cardToDelete });
+    })
+    .catch((err) => {
+      if (err.message === 'CastError') {
         res.status(404).send({ message: 'Карточка с указанным _id не найдена.' });
         return;
       }
-      res.send({ data: cardToDelete });
-    })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка на стороне сервера' }));
+      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+    });
 };
 
 export const addLikeCard = (req, res) => {
@@ -40,15 +43,16 @@ export const addLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
-      }
-      return res.send({ data: card });
+        res.status(400).send({ message: 'Передан несуществующий _id карточки.' });
+        return;
+      } res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+      if (err.name === 'CastError ') {
+        res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+        return;
       }
-      return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
 };
 
@@ -60,9 +64,10 @@ export const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
+        res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
+        return;
       }
-      return res.send({ data: card });
+      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
