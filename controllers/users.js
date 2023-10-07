@@ -16,19 +16,27 @@ export const createUser = (req, res) => {
     .then((user) => res.status(201).send({ data: user }))
     .catch(() => {
       if (error) {
-        return res.status(400).send({ message: error.details[0].message });
-      } return res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
+        res.status(400).send({ message: error.details[0].message });
+        return;
+      } res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
     });
 };
 
 export const getUserById = (req, res) => {
   User.findById(req.params.userId)
-    .then((data) => res.send({ data }))
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
+        return;
+      }
+      res.send({ data });
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
+        res.status(400).send({ message: 'Переданы некорректные данные для получения профиля' });
+        return;
       }
-      return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
 };
 
@@ -42,15 +50,15 @@ export const updateUserInfo = (req, res) => {
     { new: true, runValidators: true, upsert: true },
   )
     .then((updatedUserInfo) => {
-      res.send({ data: updatedUserInfo });
-    })
-    .catch((err) => {
-      if (error) {
-        res.status(400).send({ message: error.details[0].message });
+      if (!updatedUserInfo) {
+        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
         return;
       }
-      if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
+      res.send({ data: updatedUserInfo });
+    })
+    .catch(() => {
+      if (error) {
+        res.status(400).send({ message: error.details[0].message });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
@@ -63,13 +71,15 @@ export const updateUserAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true, upsert: true })
     .then((updatedAvatar) => {
       if (!updatedAvatar) {
-        return res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
+        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
+        return;
       }
-      return res.send({ data: updatedAvatar });
+      res.send({ data: updatedAvatar });
     })
     .catch(() => {
       if (error) {
-        return res.status(400).send({ message: error.details[0].message });
-      } return res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
+        res.status(400).send({ message: error.details[0].message });
+        return;
+      } res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
     });
 };
