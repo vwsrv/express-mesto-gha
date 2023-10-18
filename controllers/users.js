@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import bcrypt from 'bcryptjs';
 import User from '../models/user';
 import { userValidation, userAvatarValidation } from '../validations/user';
 
@@ -11,8 +13,17 @@ export const getUsers = (req, res) => {
 
 export const createUser = (req, res) => {
   const { error } = userValidation(req.body);
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
     .then((user) => res.status(201).send({ data: user }))
     .catch(() => {
       if (error) {
@@ -23,10 +34,10 @@ export const createUser = (req, res) => {
 };
 
 export const getUserById = (req, res) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
+        res.status(404).send({ message: 'Пользователя по указанному _id не существует.' });
         return;
       }
       res.send({ data });
