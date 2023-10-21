@@ -37,12 +37,15 @@ export const getUserById = (req, res) => {
   User.findById(req.user._id)
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'Пользователя по указанному _id не существует.' });
-        return;
+        throw new Error('AuthFailed');
       }
       res.send({ data });
     })
     .catch((err) => {
+      if (err.message === 'AuthFailed') {
+        res.status(404).send({ message: 'Вы не авторизованы' });
+        return;
+      }
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные для получения профиля' });
         return;

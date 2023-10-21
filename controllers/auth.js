@@ -17,7 +17,7 @@ export const loginUser = (req, res) => {
           }
           const token = generateToken({ _id: user._id, email: user.email });
           res.cookie('mestoToken', token, { maxAge: '604800000', httpOnly: true, sameSite: true });
-          return res.status(200).send({ _id: user._id });
+          return res.status(200).send({ message: 'Авторизация прошла успешно!', _id: user._id });
         });
     })
     .catch((err) => {

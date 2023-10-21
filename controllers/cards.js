@@ -22,19 +22,27 @@ export const createCard = (req, res) => {
 };
 
 export const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  const { cardId } = req.params;
+  Card.findById(cardId)
+    .orFail(() => new Error('EmptyData'))
     .then((cardToDelete) => {
-      if (!cardToDelete) {
-        res.status(404).send({ message: 'Карточка с указанным _id не найдена.' });
+      if (!req.user._id !== cardToDelete.owner.toString()) {
+        throw new Error('AuthFailed');
       }
-      res.send({ data: cardToDelete });
+      return Card.findByIdAndDelete(cardToDelete._id)
+        .then(() => res.status(200).send({ message: 'Карточка удалена успешно!', data: cardToDelete }));
     })
     .catch((err) => {
-      if (err.message === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные для удаления карточки' });
-        return;
+      if (err.message === 'EmptyData') {
+        return res.status(404).send({ message: 'Карточки с таким _id не существует.' });
       }
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+      if (err.message === 'AuthFailed') {
+        return res.status(401).send({ message: 'Доступ к этой карточке для Вас ограничен' });
+      }
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные для удаления карточки' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
 };
 
@@ -46,16 +54,15 @@ export const addLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
-        return;
-      } res.send({ data: card });
+        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
+      }
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError ') {
-        res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
-        return;
+        return res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
       }
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+      return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
 };
 
@@ -67,16 +74,14 @@ export const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
-        return;
+        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
       }
-      res.send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
-        return;
+        return res.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
       }
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+      return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
     });
 };
