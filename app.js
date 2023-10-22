@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
 import authRouter from './routes/auth';
+import errorHandler from './validations/ErrorHandler';
 
 const {
   PORT = 3000,
@@ -25,5 +26,7 @@ async function initServer() {
   await app.listen(PORT);
   console.log('Server successfully started!');
 }
+
+app.use(errorHandler);
 
 initServer();

@@ -2,16 +2,17 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user';
 import { userValidation, userAvatarValidation } from '../validations/user';
+import AuthError from '../validations/AuthError';
+import NotFoundError from '../validations/NotFoundError';
+import CastError from '../validations/CastError';
 
-export const getUsers = (req, res) => {
+export const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
-    });
+    .catch(next);
 };
 
-export const createUser = (req, res) => {
+export const createUser = (req, res, next) => {
   const { error } = userValidation(req.body);
   const {
     name, about, avatar, email, password,
@@ -27,34 +28,24 @@ export const createUser = (req, res) => {
     .then((user) => res.status(201).send({ data: user }))
     .catch(() => {
       if (error) {
-        res.status(400).send({ message: error.details[0].message });
-        return;
-      } res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
+        return res.status(400).send({ message: error.details[0].message });
+      }
+      return next();
     });
 };
 
-export const getUserById = (req, res) => {
+export const getUserById = (req, res, next) => {
   User.findById(req.user._id)
-    .then((data) => {
-      if (!data) {
-        throw new Error('AuthFailed');
-      }
-      res.send({ data });
+    .orFail(() => {
+      throw new CastError('Переданы некорректные данные для получения профиля');
     })
-    .catch((err) => {
-      if (err.message === 'AuthFailed') {
-        res.status(404).send({ message: 'Вы не авторизованы' });
-        return;
-      }
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные для получения профиля' });
-        return;
-      }
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
-    });
+    .then((data) => {
+      res.status(200).send({ data });
+    })
+    .catch(next);
 };
 
-export const updateUserInfo = (req, res) => {
+export const updateUserInfo = (req, res, next) => {
   const { error } = userValidation(req.body);
   const { name, about } = req.body;
 
@@ -63,37 +54,34 @@ export const updateUserInfo = (req, res) => {
     { name, about },
     { new: true, runValidators: true, upsert: true },
   )
+    .orFail(() => {
+      throw new NotFoundError('Пользователь с таким ID не зарегистрирован');
+    })
     .then((updatedUserInfo) => {
-      if (!updatedUserInfo) {
-        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
-        return;
-      }
       res.send({ data: updatedUserInfo });
     })
     .catch(() => {
       if (error) {
         res.status(400).send({ message: error.details[0].message });
-        return;
       }
-      res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
+      return next();
     });
 };
 
-export const updateUserAvatar = (req, res) => {
+export const updateUserAvatar = (req, res, next) => {
   const { error } = userAvatarValidation(req.body);
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true, upsert: true })
+    .orFail(() => {
+      throw new AuthError('Пользователь с таким ID не зарегистрирован');
+    })
     .then((updatedAvatar) => {
-      if (!updatedAvatar) {
-        res.status(404).send({ message: 'Пользователь с таким ID не зарегистрирован' });
-        return;
-      }
       res.send({ data: updatedAvatar });
     })
     .catch(() => {
       if (error) {
         res.status(400).send({ message: error.details[0].message });
-        return;
-      } res.status(500).send({ message: 'Произошла ошибка на стороне сервера.' });
+      }
+      return next();
     });
 };

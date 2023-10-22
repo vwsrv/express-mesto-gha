@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import AuthError from '../validations/AuthError';
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 
@@ -9,20 +10,15 @@ export default function auth(req, res, next) {
     const authorization = req.cookies.mestoToken;
 
     if (!authorization) {
-      throw new Error('AuthFailed');
+      throw new AuthError('Неправильные имя пользователя или пароль.');
     }
     const token = authorization.replace('Bearer ', '');
     payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'dev_secret');
   } catch (err) {
-    if (err.message === 'AuthFailed') {
-      return res.status(401).send({ message: 'Неправильные имя пользователя или пароль' });
-      ;
-    }
     if (err.message === 'JsonWebTokenError') {
-      return res.status(401).send({ message: 'С токеном что-то не так' });
-      ;
+      throw new AuthError('С токеном что-то не так.');
     }
-    return res.status(500).send({ message: 'Произошла ошибка на стороне сервера' });
+    return next(err);
   }
 
   req.user = payload;
