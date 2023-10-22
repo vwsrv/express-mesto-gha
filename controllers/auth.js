@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import bcrypt from 'bcryptjs';
 import User from '../models/user';
 import generateToken from '../utils/jwt';
@@ -21,5 +20,21 @@ export const loginUser = (req, res, next) => {
           return res.status(200).send({ message: 'Авторизация прошла успешно!', _id: user._id });
         });
     })
+    .catch(next);
+};
+
+export const createUser = (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
+    .then((user) => res.status(201).send({ data: user }))
     .catch(next);
 };

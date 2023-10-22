@@ -1,21 +1,20 @@
 /* eslint-disable no-useless-escape */
 import Joi from 'joi';
 import { celebrate } from 'celebrate';
+import { urlPattern } from '../utils/constants';
 
-export const userValidation = (data) => {
-  const userSchema = Joi.object({
-    name: Joi.string().min(2).max(40).default('Жак-Ив Кусто'),
-    about: Joi.string().min(2).max(30).default('Исследователь океана'),
-    email: Joi.string().email(),
-    password: Joi.string().min(8),
-  });
-  return userSchema.validate(data);
-};
+export const UserValidationSchema = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).optional(),
+    about: Joi.string().min(2).max(30).optional(),
+    avatar: Joi.string().regex(urlPattern).optional(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  }),
+});
 
-export const userAvatarValidation = (data) => {
-  const avatarSchema = Joi.object({
-    avatar: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/)
-      .messages({ 'string.pattern.base': 'Введите корректную ссылку на изображение' }),
-  });
-  return avatarSchema.validate(data);
-};
+export const userLinkValidationSchema = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().length(24).hex().required(),
+  }),
+});

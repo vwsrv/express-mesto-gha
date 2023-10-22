@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import {
-  getUserById, getUsers, createUser, updateUserInfo, updateUserAvatar,
+  getUserById, getUsers, updateUserInfo, updateUserAvatar,
 } from '../controllers/users';
 import auth from '../middleware/auth';
+import { UserValidationSchema, userLinkValidationSchema } from '../validations/user';
 
 const usersRouter = Router();
 usersRouter.get('/users', auth, getUsers);
-usersRouter.get('/users/me', auth, getUserById);
-usersRouter.post('/signup', createUser);
-usersRouter.patch('/users/me', auth, updateUserInfo);
-usersRouter.patch('/users/me/avatar', auth, updateUserAvatar);
+usersRouter.get('/users/:userId', auth, userLinkValidationSchema, getUserById);
+usersRouter.patch('/users/me', UserValidationSchema, auth, updateUserInfo);
+usersRouter.patch('/users/me/avatar', UserValidationSchema, auth, updateUserAvatar);
 
 export default usersRouter;

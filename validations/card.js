@@ -1,16 +1,21 @@
-/* eslint-disable no-useless-escape */
-import { celebrate, Joi } from 'celebrate';
+import Joi from 'joi';
+import { celebrate } from 'celebrate';
+import { urlPattern } from '../utils/constants';
 
-export const cardsValidation = (data) => {
-  const cardsSchema = Joi.object({
-    name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/)
-      .messages({ 'string.pattern.base': 'Введите корректную ссылку на изображение' }),
-  });
-  return cardsSchema.validate(data);
-};
+export const addCardValidationSchema = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    link: Joi.string().regex(urlPattern),
+  }),
+});
 
-export const likeStatusValidation = celebrate({
+export const cardLinkValidationSchema = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex().required(),
+  }),
+});
+
+export const deleteCardValidationSchema = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().length(24).hex().required(),
   }),

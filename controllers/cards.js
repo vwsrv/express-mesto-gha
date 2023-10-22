@@ -1,5 +1,4 @@
 import Card from '../models/card';
-import { cardsValidation } from '../validations/card';
 import AuthError from '../validations/AuthError';
 import NotFoundError from '../validations/NotFoundError';
 
@@ -10,16 +9,10 @@ export const getCards = (req, res) => {
 };
 
 export const createCard = (req, res, next) => {
-  const { error } = cardsValidation(req.body);
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(201).send({ data: card }))
-    .catch(() => {
-      if (error) {
-        res.status(400).send({ message: error.details[0].message });
-      }
-      return next();
-    });
+    .catch(next);
 };
 
 export const deleteCard = (req, res, next) => {
