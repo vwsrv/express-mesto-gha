@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import express, { json } from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
@@ -23,9 +22,7 @@ app.use(auth, cardsRouter);
 
 async function initServer() {
   await mongoose.connect(MONGO_URL);
-  console.log('DataBase is connected...');
   await app.listen(PORT);
-  console.log('Server successfully started!');
 }
 
 app.use(errorHandler);
