@@ -26,7 +26,8 @@ export const createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => res.status(201).send({ data: user }))
-    .catch(() => {
+    .catch((err) => {
+      console.log(err);
       if (error) {
         return res.status(400).send({ message: error.details[0].message });
       }

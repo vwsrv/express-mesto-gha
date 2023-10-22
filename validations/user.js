@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 import Joi from 'joi';
+import { celebrate } from 'celebrate';
 
 export const userValidation = (data) => {
   const userSchema = Joi.object({

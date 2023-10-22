@@ -6,6 +6,7 @@ import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
 import authRouter from './routes/auth';
 import errorHandler from './validations/ErrorHandler';
+import auth from './middleware/auth';
 
 const {
   PORT = 3000,
@@ -16,9 +17,9 @@ const app = express();
 
 app.use(json());
 app.use(cookieParser());
-app.use(usersRouter);
-app.use(cardsRouter);
 app.use(authRouter);
+app.use(usersRouter);
+app.use(auth, cardsRouter);
 
 async function initServer() {
   await mongoose.connect(MONGO_URL);

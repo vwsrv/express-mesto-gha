@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
-import Joi from 'joi';
+import { celebrate, Joi } from 'celebrate';
 
-const cardsValidation = (data) => {
+export const cardsValidation = (data) => {
   const cardsSchema = Joi.object({
     name: Joi.string().min(2).max(30).required(),
     link: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/)
@@ -10,4 +10,8 @@ const cardsValidation = (data) => {
   return cardsSchema.validate(data);
 };
 
-export default cardsValidation;
+export const likeStatusValidation = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex().required()
+  })
+});

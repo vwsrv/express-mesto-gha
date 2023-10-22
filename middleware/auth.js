@@ -10,17 +10,17 @@ export default function auth(req, res, next) {
     const authorization = req.cookies.mestoToken;
 
     if (!authorization) {
-      throw new AuthError('Неправильные имя пользователя или пароль.');
+      throw new AuthError('Произошла ошибка авторизации');
     }
     const token = authorization.replace('Bearer ', '');
     payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'dev_secret');
+    req.user = payload;
   } catch (err) {
     if (err.message === 'JsonWebTokenError') {
       throw new AuthError('С токеном что-то не так.');
     }
-    return next(err);
+    next(err);
   }
 
-  req.user = payload;
   return next();
 }

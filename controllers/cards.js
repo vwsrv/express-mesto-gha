@@ -1,5 +1,5 @@
 import Card from '../models/card';
-import cardsValidation from '../validations/card';
+import {cardsValidation} from '../validations/card';
 import AuthError from '../validations/AuthError';
 import NotFoundError from '../validations/NotFoundError';
 
@@ -39,6 +39,7 @@ export const deleteCard = (req, res, next) => {
 };
 
 export const addLikeCard = (req, res, next) => {
+  const {error} = likeStatusValidation(req.body);
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -50,7 +51,13 @@ export const addLikeCard = (req, res, next) => {
     .then((card) => {
       res.send({ data: card });
     })
-    .catch(next);
+    .catch((err) => {
+      
+      if (error) {
+        res.status(400).send({ message: error.details[0].message });
+      }
+      next(err)
+    });
 };
 
 export const dislikeCard = (req, res, next) => {
