@@ -4,11 +4,12 @@ import {
 } from '../controllers/cards';
 import {
   addCardValidationSchema, cardLinkValidationSchema, deleteCardValidationSchema,
-} from '../validations/card';
+} from '../validations/cards';
+import auth from '../middleware/auth';
 
 const cardsRouter = Router();
 
-cardsRouter.get('/cards', cardLinkValidationSchema, getCards);
+cardsRouter.get('/cards', auth, getCards);
 cardsRouter.post('/cards', addCardValidationSchema, createCard);
 cardsRouter.delete('/cards/:cardId', deleteCardValidationSchema, deleteCard);
 cardsRouter.put('/cards/:cardId/likes', cardLinkValidationSchema, addLikeCard);

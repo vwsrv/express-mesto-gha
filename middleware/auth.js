@@ -21,6 +21,4 @@ export default function auth(req, res, next) {
     }
     next(err);
   }
-
-  return next();
 }

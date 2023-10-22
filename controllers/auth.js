@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user';
 import generateToken from '../utils/jwt';
 import AuthError from '../validations/AuthError';
+import AlreadyExists from '../validations/AlreadyExists';
+import { STATUS } from '../utils/constants';
 
 export const loginUser = (req, res, next) => {
   const { email, password } = req.body;
@@ -17,7 +19,7 @@ export const loginUser = (req, res, next) => {
           }
           const token = generateToken({ _id: user._id, email: user.email });
           res.cookie('mestoToken', token, { maxAge: '604800000', httpOnly: true, sameSite: true });
-          return res.status(200).send({ message: 'Авторизация прошла успешно!', _id: user._id });
+          return res.status(STATUS.OK).send({ message: 'Авторизация прошла успешно!', _id: user._id });
         });
     })
     .catch(next);
@@ -35,6 +37,11 @@ export const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(201).send({ data: user }))
-    .catch(next);
+    .then((user) => res.status(STATUS.CREATED).send({ data: user }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new AlreadyExists('Такой пользователь уже зарегистрирован!'));
+      }
+      next(err);
+    });
 };

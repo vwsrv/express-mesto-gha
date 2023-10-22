@@ -1,6 +1,8 @@
+import { STATUS } from '../utils/constants';
+
 export default class AlreadyExists extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409;
+    this.statusCode = STATUS.CONFLICT;
   }
 }
