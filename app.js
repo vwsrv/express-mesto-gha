@@ -34,9 +34,7 @@ app.use(errorHandler);
 
 async function initServer() {
   await mongoose.connect(MONGO_URL);
-  console.log('DB connected');
   await app.listen(PORT);
-  console.log('Server started');
 }
 
 initServer();

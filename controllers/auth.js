@@ -45,8 +45,8 @@ export const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new AlreadyExists('Пользователь с таким email уже зарегистрирован'));
+        return next(new AlreadyExists('Пользователь с таким email уже зарегистрирован'));
       }
-      next(err);
+      return next(err);
     });
 };
