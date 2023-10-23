@@ -1,6 +1,6 @@
 import Card from '../models/card';
-import AuthError from '../validations/AuthError';
 import NotFoundError from '../validations/NotFoundError';
+import ForbiddenError from '../validations/ForbiddenError';
 import { STATUS } from '../utils/constants';
 
 export const getCards = (req, res, next) => {
@@ -23,10 +23,10 @@ export const deleteCard = (req, res, next) => {
       throw new NotFoundError('Передана карточка с несуществующим _id');
     })
     .then((cardToDelete) => {
-      if (!req.user._id !== cardToDelete.owner.toString()) {
-        throw new AuthError('Недостаточно прав для удаления карточки');
+      if (req.user._id !== cardToDelete.owner.toString()) {
+        throw new ForbiddenError('Недостаточно прав для удаления карточки');
       }
-      Card.findByIdAndDelete(cardToDelete._id)
+      Card.deleteOne(cardToDelete)
         .then(() => res.status(STATUS.OK).send({ message: 'Карточка удалена успешно!', data: cardToDelete }));
     })
     .catch(next);
@@ -43,7 +43,7 @@ export const addLikeCard = (req, res, next) => {
       throw new NotFoundError('Передана карточка с несуществующим _id');
     })
     .then((card) => {
-      res.status(STATUS.CREATED).send({ data: card });
+      res.status(STATUS.OK).send({ data: card });
     })
     .catch(next);
 };
@@ -59,7 +59,7 @@ export const dislikeCard = (req, res, next) => {
       throw new NotFoundError('Передана карточка с несуществующим _id');
     })
     .then((card) => {
-      res.status(STATUS.CREATED).send({ data: card });
+      res.status(STATUS.OK).send({ data: card });
     })
     .catch(next);
 };

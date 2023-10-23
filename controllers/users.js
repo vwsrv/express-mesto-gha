@@ -10,6 +10,14 @@ export const getUsers = (req, res, next) => {
     .catch(next);
 };
 
+export const getCurrentUserInfo = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      res.status(STATUS.OK).send({ user });
+    })
+    .catch(next);
+};
+
 export const getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
@@ -34,7 +42,7 @@ export const updateUserInfo = (req, res, next) => {
       throw new NotFoundError('Пользователя с таким _id не существует');
     })
     .then((updatedUserInfo) => {
-      res.status(STATUS.CREATED).send({ data: updatedUserInfo });
+      res.status(STATUS.OK).send({ data: updatedUserInfo });
     })
     .catch(next);
 };
@@ -46,7 +54,7 @@ export const updateUserAvatar = (req, res, next) => {
       throw new AuthError('Пользователь с таким ID не зарегистрирован');
     })
     .then((updatedAvatar) => {
-      res.status(STATUS.CREATED).send({ data: updatedAvatar });
+      res.status(STATUS.OK).send({ data: updatedAvatar });
     })
     .catch(next);
 };

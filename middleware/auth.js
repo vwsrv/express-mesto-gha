@@ -15,6 +15,7 @@ export default function auth(req, res, next) {
     const token = authorization.replace('Bearer ', '');
     payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'dev_secret');
     req.user = payload;
+    next();
   } catch (err) {
     if (err.message === 'JsonWebTokenError') {
       throw new AuthError('С токеном что-то не так.');

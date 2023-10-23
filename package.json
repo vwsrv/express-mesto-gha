@@ -5,12 +5,10 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-rate-limit": "^7.1.1",
     "helmet": "^7.0.0",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
-    "react-helmet": "^6.1.0",
     "yarn": "^1.22.19"
   },
   "name": "express-mesto-gha",
@@ -18,10 +16,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node --trace-warnings --inspect -- app.js",
-    "lint": "yarn eslint"
+    "lint": "yarn eslint ."
   },
   "repository": "https://github.com/vwsrv/express-mesto-gha",
   "author": "Bl Bltich <vissar2016@yandex.ru>",

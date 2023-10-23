@@ -37,10 +37,15 @@ export const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(STATUS.CREATED).send({ data: user }))
+    .then((createdUser) => {
+      const { _id } = createdUser;
+      res.status(STATUS.CREATED).send({
+        name, about, avatar, email, _id,
+      });
+    })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new AlreadyExists('Такой пользователь уже зарегистрирован!'));
+        next(new AlreadyExists('Пользователь с таким email уже зарегистрирован'));
       }
       next(err);
     });
