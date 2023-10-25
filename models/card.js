@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import mongoose from 'mongoose';
-import isURL from 'validator/lib/isURL';
+import isURL from 'validator';
 
 const cardSchema = new mongoose.Schema({
   name: {
