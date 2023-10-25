@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import mongoose from 'mongoose';
-import isURL from 'validator';
+import validator from 'validator';
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -17,7 +17,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return isURL(v);
+        return validator.isURL(v);
       },
       message: (props) => `${props.value} укажите корректную ссылку на изображение`,
     },
