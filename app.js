@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import express, { json } from 'express';
@@ -34,7 +35,9 @@ app.use(errorHandler);
 
 async function initServer() {
   await mongoose.connect(MONGO_URL);
+  console.log('Data Base is connected');
   await app.listen(PORT);
+  console.log(`Server started at PORT: ${PORT}`);
 }
 
 initServer();
