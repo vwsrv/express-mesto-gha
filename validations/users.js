@@ -1,7 +1,7 @@
-/* eslint-disable no-useless-escape */
+/* eslint-disable import/extensions */
 import Joi from 'joi';
 import { celebrate } from 'celebrate';
-import { urlPattern } from '../utils/constants';
+import { urlPattern } from '../utils/constants.js';
 
 export const userValidationSchema = celebrate({
   body: Joi.object().keys({
