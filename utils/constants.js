@@ -14,3 +14,9 @@ export const STATUS = {
   SEVER_ERR: HTTP_STATUS.HTTP_STATUS_INTERNAL_SERVER_ERROR, // 500
   FORBIDDEN: HTTP_STATUS.HTTP_STATUS_FORBIDDEN, // 403
 };
+export const ALLOWRDCORS = [
+  'http://vwssrv.nomoredomainsrocks.ru/',
+  'http://vwssrv.nomoredomainsrocks.ru/',
+  'localhost:3000',
+];
+export const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';

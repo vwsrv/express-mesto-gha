@@ -12,6 +12,7 @@ import authRouter from './routes/auth.js';
 import errorHandler from './middleware/ErrorHandler.js';
 import NotFoundError from './validations/NotFoundError.js';
 import auth from './middleware/auth.js';
+import { ALLOWRDCORS, DEFAULT_ALLOWED_METHODS } from './utils/constants.js';
 
 const {
   PORT = 80,
@@ -23,6 +24,20 @@ const app = express();
 app.use(json());
 app.use(cookieParser());
 app.use(helmet());
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (ALLOWRDCORS.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
+app.use((req, res, next) => {
+  const { method } = req;
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+  }
+  next();
+});
 app.use(authRouter);
 app.use(auth);
 app.use(cardsRouter);
