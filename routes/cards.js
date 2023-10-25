@@ -1,11 +1,12 @@
+/* eslint-disable import/extensions */
 import { Router } from 'express';
 import {
   deleteCard, createCard, getCards, addLikeCard, dislikeCard,
-} from '../controllers/cards';
+} from '../controllers/cards.js';
 import {
   addCardValidationSchema, cardLinkValidationSchema, deleteCardValidationSchema,
-} from '../validations/cards';
-import auth from '../middleware/auth';
+} from '../validations/cards.js';
+import auth from '../middleware/auth.js';
 
 const cardsRouter = Router();
 

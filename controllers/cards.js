@@ -1,7 +1,8 @@
-import Card from '../models/card';
-import NotFoundError from '../validations/NotFoundError';
-import ForbiddenError from '../validations/ForbiddenError';
-import { STATUS } from '../utils/constants';
+/* eslint-disable import/extensions */
+import Card from '../models/card.js';
+import NotFoundError from '../validations/NotFoundError.js';
+import ForbiddenError from '../validations/ForbiddenError.js';
+import { STATUS } from '../utils/constants.js';
 
 export const getCards = (req, res, next) => {
   Card.find({})

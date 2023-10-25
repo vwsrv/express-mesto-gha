@@ -1,4 +1,5 @@
-import { STATUS } from '../utils/constants';
+/* eslint-disable import/extensions */
+import { STATUS } from '../utils/constants.js';
 
 export default function errorHandler(err, req, res, next) {
   const { statusCode = STATUS.SEVER_ERR, message } = err;

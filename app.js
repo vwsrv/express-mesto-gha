@@ -1,16 +1,16 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/extensions */
 import express, { json } from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 import helmet from 'helmet';
-import usersRouter from './routes/users';
-import cardsRouter from './routes/cards';
-import authRouter from './routes/auth';
-import errorHandler from './middleware/ErrorHandler';
-import NotFoundError from './validations/NotFoundError';
-import auth from './middleware/auth';
+import usersRouter from './routes/users.js';
+import cardsRouter from './routes/cards.js';
+import authRouter from './routes/auth.js';
+import errorHandler from './middleware/ErrorHandler.js';
+import NotFoundError from './validations/NotFoundError.js';
+import auth from './middleware/auth.js';
 
 const {
   PORT = 3000,

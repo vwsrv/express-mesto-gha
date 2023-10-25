@@ -1,5 +1,6 @@
+/* eslint-disable import/extensions */
 import jwt from 'jsonwebtoken';
-import AuthError from '../validations/AuthError';
+import AuthError from '../validations/AuthError.js';
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 

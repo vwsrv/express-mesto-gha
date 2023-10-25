@@ -1,9 +1,10 @@
+/* eslint-disable import/extensions */
 import bcrypt from 'bcryptjs';
-import User from '../models/user';
-import generateToken from '../utils/jwt';
-import AuthError from '../validations/AuthError';
-import AlreadyExists from '../validations/AlreadyExists';
-import { STATUS } from '../utils/constants';
+import User from '../models/user.js';
+import generateToken from '../utils/jwt.js';
+import AuthError from '../validations/AuthError.js';
+import AlreadyExists from '../validations/AlreadyExists.js';
+import { STATUS } from '../utils/constants.js';
 
 export const loginUser = (req, res, next) => {
   const { email, password } = req.body;

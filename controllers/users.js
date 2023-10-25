@@ -1,8 +1,8 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import User from '../models/user';
-import AuthError from '../validations/AuthError';
-import NotFoundError from '../validations/NotFoundError';
-import { STATUS } from '../utils/constants';
+/* eslint-disable import/extensions */
+import User from '../models/user.js';
+import AuthError from '../validations/AuthError.js';
+import NotFoundError from '../validations/NotFoundError.js';
+import { STATUS } from '../utils/constants.js';
 
 export const getUsers = (req, res, next) => {
   User.find({})
