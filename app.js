@@ -13,7 +13,7 @@ import NotFoundError from './validations/NotFoundError.js';
 import auth from './middleware/auth.js';
 
 const {
-  PORT = 3000,
+  PORT = 80,
   MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb',
 } = process.env;
 
