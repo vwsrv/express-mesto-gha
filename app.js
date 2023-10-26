@@ -1,9 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import express, { json } from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
+import cors from 'cors';
 import helmet from 'helmet';
 import usersRouter from './routes/users.js';
 import cardsRouter from './routes/cards.js';
@@ -13,15 +15,19 @@ import NotFoundError from './validations/NotFoundError.js';
 import auth from './middleware/auth.js';
 
 const {
-  PORT = 80,
+  PORT = 3001,
   MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb',
 } = process.env;
 
 const app = express();
-
 app.use(json());
 app.use(cookieParser());
 app.use(helmet());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://http://vwssrv.nomoredomainsrocks.ru/'],
+  credentials: true,
+  maxAge: 30,
+}));
 app.use(authRouter);
 app.use(auth);
 app.use(cardsRouter);
