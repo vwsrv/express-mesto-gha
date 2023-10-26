@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import mongoose from 'mongoose';
-import isEmail from 'validator/lib/isEmail';
-import isURL from 'validator/lib/isURL';
+import validate from 'validator';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -21,7 +20,7 @@ const userSchema = new mongoose.Schema({
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
       validator(v) {
-        return isURL(v);
+        return validate.isURL(v);
       },
       message: (props) => `${props.value} укажите корректную ссылку на изображение`,
     },
@@ -35,7 +34,7 @@ const userSchema = new mongoose.Schema({
     },
     validate: {
       validator(v) {
-        return isEmail(v);
+        return validate.isEmail(v);
       },
       message: (props) => `${props.value} не является действительной почтой!`,
     },

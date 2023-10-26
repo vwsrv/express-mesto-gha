@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import usersRouter from './routes/users.js';
 import cardsRouter from './routes/cards.js';
 import authRouter from './routes/auth.js';
-import errorHandler from './middleware/ErrorHandler.js';
+import errorHandler from './middleware/errorsHandler.js';
 import NotFoundError from './validations/NotFoundError.js';
 import auth from './middleware/auth.js';
 
