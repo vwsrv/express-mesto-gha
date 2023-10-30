@@ -13,7 +13,7 @@ export const getUsers = (req, res, next) => {
 export const getCurrentUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      res.status(STATUS.OK).send({ user });
+      res.status(STATUS.OK).send(user);
     })
     .catch(next);
 };
@@ -25,7 +25,7 @@ export const getUserById = (req, res, next) => {
       throw new NotFoundError('Пользователя с таким _id не существует');
     })
     .then((data) => {
-      res.status(STATUS.OK).send({ data });
+      res.status(STATUS.OK).send(data);
     })
     .catch(next);
 };
@@ -42,7 +42,7 @@ export const updateUserInfo = (req, res, next) => {
       throw new NotFoundError('Пользователя с таким _id не существует');
     })
     .then((updatedUserInfo) => {
-      res.status(STATUS.OK).send({ data: updatedUserInfo });
+      res.status(STATUS.OK).send(updatedUserInfo);
     })
     .catch(next);
 };
@@ -54,7 +54,7 @@ export const updateUserAvatar = (req, res, next) => {
       throw new AuthError('Пользователь с таким ID не зарегистрирован');
     })
     .then((updatedAvatar) => {
-      res.status(STATUS.OK).send({ data: updatedAvatar });
+      res.status(STATUS.OK).send(updatedAvatar);
     })
     .catch(next);
 };

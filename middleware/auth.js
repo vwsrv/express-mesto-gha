@@ -13,6 +13,7 @@ export default function auth(req, res, next) {
     if (!authorization) {
       throw new AuthError('Произошла ошибка авторизации');
     }
+
     const token = authorization.replace('Bearer ', '');
     payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'dev_secret');
     req.user = payload;
