@@ -1,6 +1,12 @@
 {
   "extends": "airbnb-base",
   "rules": {
-    "no-underscore-dangle": ["error", { "allow": ["_id"]}]
+    "no-underscore-dangle": ["error", { "allow": ["_id"]}],
+    "import/extensions": ["error", "ignorePackages", {
+      "js": "always",
+      "jsx": "always",
+      "ts": "always",
+      "tsx": "always"
+    }]
   }
 }
