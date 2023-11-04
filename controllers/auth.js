@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 import generateToken from '../utils/jwt.js';
-import AuthError from '../validations/AuthError.js';
-import AlreadyExists from '../validations/AlreadyExists.js';
-import ValidationError from '../validations/ValidationError.js';
+import AuthError from '../errors/AuthError.js';
+import AlreadyExists from '../errors/AlreadyExists.js';
+import ValidationError from '../errors/ValidationError.js';
 import { STATUS } from '../utils/constants.js';
 
 export const loginUser = (req, res, next) => {

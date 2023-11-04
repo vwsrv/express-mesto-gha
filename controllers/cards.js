@@ -1,7 +1,7 @@
 import Card from '../models/card.js';
-import NotFoundError from '../validations/NotFoundError.js';
-import ValidationError from '../validations/ValidationError.js';
-import CastError from '../validations/CastError.js';
+import NotFoundError from '../errors/NotFoundError.js';
+import ValidationError from '../errors/ValidationError.js';
+import CastError from '../errors/CastError.js';
 import { STATUS } from '../utils/constants.js';
 
 export const getCards = (req, res, next) => {
@@ -16,7 +16,7 @@ export const createCard = (req, res, next) => {
     .then((card) => res.status(STATUS.CREATED).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new ValidationError('Переданы некорретные данные для создания карточки'));
+        return next(new CastError('Переданы некорретные данные для создания карточки'));
       }
       return next(err);
     });
