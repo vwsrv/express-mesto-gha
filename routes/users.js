@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { Router } from 'express';
 import {
   getCurrentUserInfo, getUsers, updateUserInfo, updateUserAvatar, getUserById,
@@ -8,8 +7,8 @@ import { userLinkValidationSchema, updateUserValidationSchema } from '../validat
 const usersRouter = Router();
 usersRouter.get('/users', getUsers);
 usersRouter.get('/users/me', getCurrentUserInfo);
-usersRouter.get('/users/:userId', userLinkValidationSchema, getUserById);
-usersRouter.patch('/users/me', updateUserValidationSchema, updateUserInfo);
-usersRouter.patch('/users/me/avatar', updateUserValidationSchema, updateUserAvatar);
+usersRouter.get('/users/:userId',  getUserById);
+usersRouter.patch('/users/me',  updateUserInfo);
+usersRouter.patch('/users/me/avatar',  updateUserAvatar);
 
 export default usersRouter;

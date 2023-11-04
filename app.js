@@ -1,7 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
 import express, { json } from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';

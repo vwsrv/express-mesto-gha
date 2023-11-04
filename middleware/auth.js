@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import jwt from 'jsonwebtoken';
 import AuthError from '../validations/AuthError.js';
 
