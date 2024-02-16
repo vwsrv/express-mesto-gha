@@ -31,11 +31,8 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
-* [Roadmap](#roadmap)
 * [Contributing](#contributing)
-* [License](#license)
 * [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
 
 ## About The Project
 
