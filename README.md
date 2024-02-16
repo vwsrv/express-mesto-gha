@@ -139,4 +139,4 @@ Distributed under the MIT License. See [LICENSE](https://github.com/vwsrv/expres
 
 ## Authors
 
-* **Vasiliy Vissarov** - *Frontend Developer* - [Vasiliy Vissarov]() - **
+* **Vasiliy Vissarov** - *Frontend Developer*
